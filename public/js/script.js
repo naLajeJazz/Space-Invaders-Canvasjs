@@ -14,7 +14,8 @@ canvas.style.backgroundColor='black';
 
 let y=boxY ,x=boxX;
 let bulletExist=false;
-let lote=[]
+let invader=[],loteInvader=8;
+let colors=["red","green","yellow","blue"]
 
 
 function Objeto(w,h,x,y,cor){
@@ -25,7 +26,7 @@ function Objeto(w,h,x,y,cor){
     
     ctx.fillStyle = cor;
     ctx.fillRect(this.x, this.y, this.w, this.h);
-    this.retangulo=()=>{
+    this.drawRetangulo=()=>{
         
         
         ctx.fillStyle=cor;
@@ -35,9 +36,18 @@ function Objeto(w,h,x,y,cor){
 
 };
 
- let obj1=new Objeto(32,32,Math.floor(Math.random()*canvasW),100,'red')
- let obj2=new Objeto(32,32,100,Math.floor(Math.random()*canvasW),'green')
- let bul=new Objeto(16,16,boxX,y,"red")
+
+for (let i = 0; i < loteInvader; i++) {
+    let xis=64
+    xis*=i
+    invader[i]=new Objeto(32,32,xis+64,100,colors[Math.floor(Math.random()*4)])  
+    
+}
+
+
+ 
+ 
+ let bul=new Objeto(4,32,boxX,y,colors[0])
 
 
 
@@ -79,6 +89,8 @@ window.addEventListener("keydown",function(event){
     setInterval(()=>xIndex=0,250)
    
 
+    let down=32
+    setInterval(()=>{down+=32},3500)
    
    
        
@@ -89,68 +101,37 @@ window.addEventListener("keydown",function(event){
 
         
         requestAnimationFrame(loop,canvas);
-        
-        
-         
-    
-    
-    
-        
-        
-        
-
-        
+            
         ctx.clearRect(0,0,canvas.width,canvas.height);
         ctx.save();
         
-        
     
-    
-        obj1.retangulo()
-        obj2.retangulo()
-        
-    
+        for (let i = 0; i < loteInvader; i++) {
+            
+            invader[i].drawRetangulo()
+            invader[i].y=down
+           
+            
+        }
  
    
     
     ctx.drawImage(img,xIndex,0,32,32,boxX,boxY,32,32);
     
-    
-    
     ctx.restore();
 
-    if (bul.y<0){bul.y=boxY;bulletExist=false}
-    
+
+    if (bul.y<0){bul.y=boxY;bulletExist=false};
+
+
     if (bulletExist==true ){
+              
+        bul.y-=28
+        bul.x=boxX+14
+        bul.drawRetangulo()
         
-       
-        
-        bul.y-=1
-        
-        bul.retangulo()
-        
-        
-         
-        
-    }
-
+         }
+ 
+    info.innerHTML=bul.y
     
-    
-    
-    
-    info.innerHTML=bulletExist
-    
-}loop()
-
-
-
-
-
-/*
-for (let i = 0; i < 2; i++) {
-        
-    lote[i]=new Objeto(32,32,Math.floor(Math.random()*100),100,'red')
-      
-  }    */
-
-
+}loop();
