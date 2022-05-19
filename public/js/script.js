@@ -10,12 +10,12 @@ let xIndex =0;
 let spd= 32;
 canvas.width=canvasW;
 canvas.height=canvasH;
-canvas.style.backgroundColor='black';
+canvas.style.backgroundColor='#0D0D0D';
 
 let y=boxY ,x=boxX;
 let bulletExist=false;
 let invader=[],loteInvader=8;
-let colors=["red","green","yellow","blue"]
+let colors=["#0DF205","#034001"]
 
 
 function Objeto(w,h,x,y,cor){
@@ -40,7 +40,7 @@ function Objeto(w,h,x,y,cor){
 for (let i = 0; i < loteInvader; i++) {
     let xis=64
     xis*=i
-    invader[i]=new Objeto(32,32,xis+64,100,colors[Math.floor(Math.random()*4)])  
+    invader[i]=new Objeto(32,32,xis+64,100,colors[Math.floor(Math.random()*colors.length)])  
     
 }
 
