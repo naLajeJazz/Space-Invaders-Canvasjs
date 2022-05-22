@@ -1,6 +1,23 @@
 body{
     background-color: rgb(26, 26, 26);
 }
+header{
+    border-bottom: #0DF205 1px solid;
+    background-color: #0D0D0D;
+    color: #0DF205;
+}
 canvas{
     border: 1px solid #0DF205;
+    
+}
+.borda {
+    border: 1px solid #0DF205;
+}
+.txt{
+    color: #0DF205;
+}
+.bck{
+    background-color: #0D0D0D;
+    border: 1px solid #0DF205;
+    height: 512px;
 }

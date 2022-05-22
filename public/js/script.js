@@ -9,9 +9,12 @@ let boxY=canvasH-64;
 let boxXPos=0;
 let xIndex =0;
 let spd= 16;
+let moveL=false;
+let moveR=false;
 canvas.width=canvasW;
 canvas.height=canvasH;
 canvas.style.backgroundColor='#0D0D0D';
+
 
 let y=boxY ,x=boxX;
 let bulletExist=false;
@@ -61,7 +64,7 @@ let ship = new Objeto(32,32,boxX,boxY,"",sprite);
 
 
 
-window.addEventListener("keyup",()=>{k='p' },false);
+window.addEventListener("keyup",()=>{k='p'; moveL=false; moveR=false },false);
 window.addEventListener("keydown",function(event){
 
     let k= event.key;
@@ -85,7 +88,7 @@ window.addEventListener("keydown",function(event){
             boxXPos=ship.centerX();
            
             
-        }
+        }else if(k == "r"){window.reload()}
         
         
         
@@ -107,10 +110,10 @@ window.addEventListener("keydown",function(event){
 
     
     
+    
 function Loop(){
             requestAnimationFrame(Loop,canvas);
             Draw();
-            
        
     
     for (let i = 0; i < loteInvader; i++) {
@@ -126,16 +129,15 @@ function Loop(){
 
     if (bulletExist==true ){
               
-        bullet.y-=2
-        bullet.x=boxXPos
+        bullet.y-=spd/2
+        bullet.x=boxXPos-bullet.w/2
        
         
          }else{bullet.x=ship.centerX()}
 
          ship.x=boxX
  
-    info.innerHTML=
-    `bulletExist: ${bulletExist} boxX: ${boxX} boxXPos: ${boxXPos} box.x: ${ship.x}` 
+    
     
 }Loop();
 
@@ -150,15 +152,26 @@ function Draw() {
     ship.spriteAnim()
    if (bulletExist) {bullet.drawRetangulo()} 
     
-
+/*
    ctx.beginPath();
    ctx.strokeStyle="red"
    ctx.moveTo(ship.centerX(),ship.centerY());
    ctx.lineTo(bullet.centerX(),bullet.centerY());
    ctx.stroke();
-
+*/
     
     ctx.restore();
 
-    
-}
+    info.innerHTML=
+    `<br> spd: ${spd}
+     <br> moveL: ${moveL}
+     <br> moveR: ${moveR}
+     <br> bulletExist: ${bulletExist}
+     <br> boxX: ${boxX}
+     <br>  boxXPos: ${boxXPos}
+     <br> ship.centerX: ${ship.centerX()}
+     <br> "a":esquerda
+     <br> "d":direita
+     <br> "w":dispara
+     `    
+};
