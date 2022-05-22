@@ -6,8 +6,9 @@ let canvasW=640;
 let canvasH=512;
 let boxX=canvasW/2;
 let boxY=canvasH-64;
+let boxXPos=0;
 let xIndex =0;
-let spd= 32;
+let spd= 16;
 canvas.width=canvasW;
 canvas.height=canvasH;
 canvas.style.backgroundColor='#0D0D0D';
@@ -47,7 +48,7 @@ for (let i = 0; i < loteInvader; i++) {
 
  
  
- let bul=new Objeto(4,32,boxX,y,colors[0])
+ let bul=new Objeto(1,6,boxX,y,colors[0])
 
 
 
@@ -73,6 +74,7 @@ window.addEventListener("keydown",function(event){
             
         }else if(k == "w" && bulletExist==false ){
             bulletExist=true;
+            boxXPos=boxX
            
             
         }
@@ -97,41 +99,43 @@ window.addEventListener("keydown",function(event){
 
     
     
-    function loop(){
-
-        
-        requestAnimationFrame(loop,canvas);
+function Loop(){
+            requestAnimationFrame(Loop,canvas);
+            Draw();
             
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.save();
         
     
-        for (let i = 0; i < loteInvader; i++) {
-            
-            invader[i].drawRetangulo()
-            invader[i].y=down
-           
-            
-        }
- 
-   
-    
-    ctx.drawImage(img,xIndex,0,32,32,boxX,boxY,32,32);
-    
-    ctx.restore();
-
+    for (let i = 0; i < loteInvader; i++) {
+        
+        invader[i].drawRetangulo()
+        invader[i].y=down
+       
+        
+    }
 
     if (bul.y<0){bul.y=boxY;bulletExist=false};
 
 
     if (bulletExist==true ){
               
-        bul.y-=28
-        bul.x=boxX+14
+        bul.y-=2
+        bul.x=boxXPos+14
         bul.drawRetangulo()
         
          }
  
-    info.innerHTML=bul.y
+    info.innerHTML=`bulletExist: ${bulletExist} boxX: ${boxX} boxXPos: ${boxXPos}` 
     
-}loop();
+}Loop();
+
+function Draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.save();
+    
+    ctx.drawImage(img,xIndex,0,32,32,boxX,boxY,32,32);
+    
+    
+    ctx.restore();
+
+    
+}
