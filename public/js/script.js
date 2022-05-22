@@ -8,7 +8,7 @@ let boxX=canvasW/2;
 let boxY=canvasH-64;
 let boxXPos=0;
 let xIndex =0;
-let spd= 16;
+let spd= 8;
 let moveL=false;
 let moveR=false;
 canvas.width=canvasW;
@@ -72,13 +72,13 @@ window.addEventListener("keydown",function(event){
    
         
         if (k == "d" && ship.centerX()+16 < canvasW){
-            
-            boxX+=spd
+            moveR=true;
+            //boxX+=spd;
             
             
         }else if(k =="a" && ship.centerX()-16 > 0){
-            
-            boxX-=spd
+            moveL=true;
+            //boxX-=spd;
             
             
             
@@ -88,7 +88,7 @@ window.addEventListener("keydown",function(event){
             boxXPos=ship.centerX();
            
             
-        }else if(k == "r"){window.reload()}
+        }
         
         
         
@@ -129,13 +129,16 @@ function Loop(){
 
     if (bulletExist==true ){
               
-        bullet.y-=spd/2
+        bullet.y-=spd*2
         bullet.x=boxXPos-bullet.w/2
        
         
          }else{bullet.x=ship.centerX()}
 
-         ship.x=boxX
+         ship.x=boxX;
+         if(moveR){boxX+=spd;}
+         if(moveL){boxX-=spd;}
+         
  
     
     
@@ -167,6 +170,7 @@ function Draw() {
      <br> moveL: ${moveL}
      <br> moveR: ${moveR}
      <br> bulletExist: ${bulletExist}
+     <br> bullet.y: ${bullet.y}
      <br> boxX: ${boxX}
      <br>  boxXPos: ${boxXPos}
      <br> ship.centerX: ${ship.centerX()}
