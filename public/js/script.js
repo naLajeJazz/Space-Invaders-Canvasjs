@@ -11,6 +11,7 @@ let xIndex =0;
 let spd= 8;
 let moveL=false;
 let moveR=false;
+let hit=false;
 canvas.width=canvasW;
 canvas.height=canvasH;
 canvas.style.backgroundColor='#0D0D0D';
@@ -18,7 +19,7 @@ canvas.style.backgroundColor='#0D0D0D';
 
 let y=boxY ,x=boxX;
 let bulletExist=false;
-let invader=[],loteInvader=8;
+let invader=[],loteInvader=1;
 let colors=["#0DF205","#034001"]
 
 
@@ -58,44 +59,41 @@ for (let i = 0; i < loteInvader; i++) {
     
 }
 
-let bullet=new Objeto(4,16,boxX,y,colors[0]);
+let bullet=new Objeto(4,32,boxX,y,colors[0]);
 let ship = new Objeto(32,32,boxX,boxY,"",sprite);
 
 
 
 
-window.addEventListener("keyup",()=>{k='p'; moveL=false; moveR=false },false);
+window.addEventListener("keyup",()=>{
+
+    
+    moveL=false;
+    moveR=false;
+
+    
+
+},false);
+
 window.addEventListener("keydown",function(event){
 
-    let k= event.key;
+        let k= event.key;
     
-   
-        
-        if (k == "d" && ship.centerX()+16 < canvasW){
+        if (k == "d" ){
             moveR=true;
-            //boxX+=spd;
-            
-            
-        }else if(k =="a" && ship.centerX()-16 > 0){
+                
+        }else if(k =="a" ){
             moveL=true;
-            //boxX-=spd;
-            
-            
-            
             
         }else if(k == "w" && bulletExist==false ){
             bulletExist=true;
             boxXPos=ship.centerX();
-           
-            
+            bullet.y=ship.centerY()-38
+                
         }
-        
-        
-        
+            
     },false);
    
-   
-  
     
     ///anima imagem
     setInterval(()=>xIndex=32,125)
@@ -118,7 +116,7 @@ function Loop(){
     
     for (let i = 0; i < loteInvader; i++) {
         
-        //invader[i].drawRetangulo()
+        invader[i].drawRetangulo()
         invader[i].y=down
        
         
@@ -136,11 +134,11 @@ function Loop(){
          }else{bullet.x=ship.centerX()}
 
          ship.x=boxX;
-         if(moveR){boxX+=spd;}
-         if(moveL){boxX-=spd;}
+         if(moveR && ship.centerX()+16 < canvasW){boxX+=spd;}
+         if(moveL && ship.centerX()-16 > 0){boxX-=spd;}
          
  
-    
+         if (bullet.y < invader[0].y){hit=true}
     
 }Loop();
 
@@ -148,7 +146,7 @@ function Draw() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();
     
-    //ctx.drawImage(sprite,xIndex,0,32,32,boxX,boxY,32,32);
+    
 
     
     
@@ -166,13 +164,14 @@ function Draw() {
     ctx.restore();
 
     info.innerHTML=
-    `<br> spd: ${spd}
+    `<br> ivnader.y: ${invader[0].y}
      <br> moveL: ${moveL}
      <br> moveR: ${moveR}
      <br> bulletExist: ${bulletExist}
      <br> bullet.y: ${bullet.y}
      <br> boxX: ${boxX}
      <br>  boxXPos: ${boxXPos}
+     <br> hit: ${hit}
      <br> ship.centerX: ${ship.centerX()}
      <br> "a":esquerda
      <br> "d":direita
