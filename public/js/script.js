@@ -19,7 +19,7 @@ canvas.style.backgroundColor='#0D0D0D';
 
 let y=boxY ,x=boxX;
 let bulletExist=false;
-let invader=[],loteInvader=1;
+let invader=[],loteInvader=8;
 let colors=["#0DF205","#034001"]
 
 
@@ -55,7 +55,11 @@ function Objeto(w,h,x,y,cor,img){
 for (let i = 0; i < loteInvader; i++) {
     let xis=64
     xis*=i
-    invader[i]=new Objeto(32,32,xis+64,100,colors[Math.floor(Math.random()*colors.length)])  
+   
+
+    
+    invader[i]=new Objeto(32,32,xis,100,colors[Math.floor(Math.random()*colors.length)])  
+    
     
 }
 
@@ -89,7 +93,7 @@ window.addEventListener("keydown",function(event){
             bulletExist=true;
             boxXPos=ship.centerX();
             bullet.y=ship.centerY()-38
-                
+            
         }
             
     },false);
@@ -100,8 +104,10 @@ window.addEventListener("keydown",function(event){
     setInterval(()=>xIndex=0,250)
    
 
-    let down=32
-    setInterval(()=>{down+=32},3500)
+    //let invaderMoveDown=32
+    //setInterval(()=>{invaderMoveDown+=32},3500)
+    let invaderMoveH=0
+    setInterval(()=>{invaderMoveH+=32},3500)
    
    
        
@@ -115,10 +121,15 @@ function Loop(){
        
     
     for (let i = 0; i < loteInvader; i++) {
-        
+        let xis=64
+    xis*=i
         invader[i].drawRetangulo()
-        invader[i].y=down
-       
+        //invader[i].y=invaderMoveDown
+       invader[i].x= xis+ invaderMoveH
+        
+        
+        
+        
         
     }
 
@@ -130,6 +141,7 @@ function Loop(){
         bullet.y-=spd*2
         bullet.x=boxXPos-bullet.w/2
        
+        
         
          }else{bullet.x=ship.centerX()}
 
@@ -164,7 +176,8 @@ function Draw() {
     ctx.restore();
 
     info.innerHTML=
-    `<br> ivnader.y: ${invader[0].y}
+    `<br> invader.y: ${invader[0].y}
+     <br> invader.x: ${invader[0].x}
      <br> moveL: ${moveL}
      <br> moveR: ${moveR}
      <br> bulletExist: ${bulletExist}
