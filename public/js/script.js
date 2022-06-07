@@ -39,11 +39,11 @@ function Objeto(w,h,x,y,cor,img){
     
     ctx.fillStyle=cor;
     ctx.fillRect(this.x, this.y, this.w, this.h);
-    this.drawRetangulo=()=>{
+    this.drawSprite=()=>{
         ctx.fillStyle=cor;
         ctx.fillRect(this.x, this.y, this.w, this.h);
         };
-    this.spriteAnim=()=>{
+    this.animSprite=()=>{
         ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,32,32); 
     } 
 
@@ -54,7 +54,7 @@ function Objeto(w,h,x,y,cor,img){
 
 for (let i = 0; i < loteInvader; i++) {
     
- invader[i]=new Objeto(32,32,64*i,100,colors[Math.floor(Math.random()*colors.length)])  
+ invader[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
     
     
 }
@@ -95,9 +95,9 @@ window.addEventListener("keydown",function(event){
     setInterval(()=>xIndex=0,250)
    
     ///Aqui vou escrever o algoritmo que controla o movimento dos invaders
-    let invaderMoveY=32
+    let invaderMoveY=canvas.height-canvas.height    ///inicia os invader no topo da tela    
     setInterval(()=>{invaderMoveY+=32},7000)
-    let invaderMoveX=0
+    let invaderMoveX=canvas.width-canvas.width      ///inicia os invaders no canto da tela
     setInterval(()=>{invaderMoveX+=32},2000)
 
     
@@ -110,7 +110,7 @@ function Loop(){
     
     for (let i = 0; i < loteInvader; i++) {
       
-        invader[i].drawRetangulo()
+        invader[i].drawSprite()
         invader[i].y=invaderMoveY
         invader[i].x=64* i+ invaderMoveX
     
@@ -140,8 +140,8 @@ function Draw() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();
     
-    ship.spriteAnim()
-    if (bulletExist) {bullet.drawRetangulo()} 
+    ship.animSprite()
+    if (bulletExist) {bullet.drawSprite()} 
     
 /*
    ctx.beginPath();
@@ -164,6 +164,7 @@ function Draw() {
      <br>  boxXPos: ${boxXPos}
      <br> hit: ${hit}
      <br> ship.centerX: ${ship.centerX()}
+     <br> xxx${screen.width}
      <br> "a":esquerda
      <br> "d":direita
      <br> "w":dispara
