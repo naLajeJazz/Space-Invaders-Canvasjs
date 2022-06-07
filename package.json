@@ -1,6 +1,27 @@
 {
   "dependencies": {
+    
     "ejs": "^3.1.8",
+    
     "express": "^4.18.1"
-  }
+  },
+  
+  "name": "canvas-game",
+  "description": "Clone Space Invaders",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "node index,js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naLajeJazz/Space-Invaders-Canvasjs.git"
+  },
+  "author": "RodrigoMelo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/naLajeJazz/Space-Invaders-Canvasjs/issues"
+  },
+  "homepage": "https://github.com/naLajeJazz/Space-Invaders-Canvasjs#readme"
 }

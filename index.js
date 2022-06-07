@@ -1,13 +1,11 @@
+
 const express = require('express');
-
-
-const app= express();
+const ap= express();
 const port=3030;
 
-
-app.set("view engine","ejs");
-app.use(express.static('./public'));
-app.get("/",(req,res)=>{
+ap.set("view engine","ejs");
+ap.use(express.static('./public'));
+ap.get("/",(req,res)=>{
     
     
                  res.render("home/index", {
@@ -15,6 +13,7 @@ app.get("/",(req,res)=>{
                  })
 })
 
-app.listen(port,()=>{
+ap.listen(port,()=>{
                   console.log("Eba!rodando na porta: localhost:"+port)
 })
+
