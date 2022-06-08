@@ -20,8 +20,13 @@ let canvas = document.querySelector("#canvas"),
  y=boxY ,
  x=boxX,
  bulletExist=false,
- invader=[],loteInvader=8,
+ invader=[],
+ loteInvader=8,
+ invaderLimitL=undefined,
+ invaderLimitR=undefined,
+ yoyo=undefined,
  colors=["#0DF205","#034001"];
+ 
  
 canvas.width=canvasW;
 canvas.height=canvasH;
@@ -91,23 +96,30 @@ window.addEventListener("keydown",function(event){
    
     
     ///anima imagem
-    setInterval(()=>xIndex=32,125)
-    setInterval(()=>xIndex=0,250)
+    setInterval(()=>xIndex=32,125);
+    setInterval(()=>xIndex=0,250);
+
+
+
+
+
+
    
     ///Aqui vou escrever o algoritmo que controla o movimento dos invaders
     let invaderMoveY=canvas.height-canvas.height    ///inicia os invader no topo da tela    
-    setInterval(()=>{invaderMoveY+=32},7000)
+    //setInterval(()=>{invaderMoveY+=32},7000)
     let invaderMoveX=canvas.width-canvas.width      ///inicia os invaders no canto da tela
-    setInterval(()=>{invaderMoveX+=32},2000)
+    setInterval(()=>{if(yoyo){ invaderMoveX+=32}else{invaderMoveX-=32}},2000)
 
     
     //Game Updades
     
 function Loop(){
-            requestAnimationFrame(Loop,canvas);
-            Draw();
-       
-    
+requestAnimationFrame(Loop,canvas);
+Draw();
+
+
+
     for (let i = 0; i < loteInvader; i++) {
       
         invader[i].drawSprite()
@@ -116,6 +128,7 @@ function Loop(){
     
     }
 
+    
     if (bullet.y<-bullet.h){bullet.y=boxY;bulletExist=false};
 
 
@@ -137,12 +150,29 @@ function Loop(){
 //Desenha objetos
 
 function Draw() {
+    let lineXMoveTo=invader[0].x,
+    lieYMoveTo=invader[0].y+64,
+    lineXTo=invader[invader.length-1].x+32,
+    lineYTo=invader[invader.length-1].y+64;
+
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();
     
     ship.animSprite()
     if (bulletExist) {bullet.drawSprite()} 
+   
     
+    ctx.beginPath();
+    ctx.strokeStyle="red"
+    ctx.moveTo(lineXMoveTo,lieYMoveTo);
+    ctx.lineTo(lineXTo,lineYTo);
+    ctx.stroke();
+
+    if(lineXMoveTo==canvas.width-canvas.width){yoyo=true;invaderLimitL=true}else{invaderLimitL=false}
+    if(lineXTo==canvas.width){yoyo=false;invaderLimitR=true}else{invaderLimitR=false}
+
+
+
 /*
    ctx.beginPath();
    ctx.strokeStyle="red"
@@ -156,6 +186,11 @@ function Draw() {
     info.innerHTML=
     `<br> invader.y: ${invader[0].y}
      <br> invader.x: ${invader[0].x}
+     <br> lineXMoveTo:${lineXMoveTo}
+     <br> lineXTo:${lineXTo}
+     <br> invaderLimitL:${invaderLimitL}
+     <br> invaderLimitR:${invaderLimitR}
+     <br> yoyo:${yoyo}
      <br> moveL: ${moveL}
      <br> moveR: ${moveR}
      <br> bulletExist: ${bulletExist}
@@ -164,9 +199,9 @@ function Draw() {
      <br>  boxXPos: ${boxXPos}
      <br> hit: ${hit}
      <br> ship.centerX: ${ship.centerX()}
-     <br> xxx${screen.width}
-     <br> "a":esquerda
-     <br> "d":direita
-     <br> "w":dispara
+     <br> canvas.width:${canvas.width}
+     <br> canvas.height:${canvas.height}
+     
+     
      `    
 };
