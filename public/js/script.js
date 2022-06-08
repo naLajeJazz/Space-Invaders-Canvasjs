@@ -6,8 +6,8 @@ let canvas = document.querySelector("#canvas"),
  info = document.querySelector(".info"),
  ctx = canvas.getContext("2d"),
  sprite = document.getElementById("shipSprite"),
- canvasW=640,
- canvasH=512,
+ canvasW=840,
+ canvasH=612,
  boxX=canvasW/2,
  boxY=canvasH-64,
  boxXPos=0,
@@ -20,8 +20,10 @@ let canvas = document.querySelector("#canvas"),
  y=boxY ,
  x=boxX,
  bulletExist=false,
+ bulletSpd=spd-3,
  invader=[],
- loteInvader=9,
+ loteInvader=4,
+ invaderSpd=0.2,
  invaderLimitL=false,
  invaderLimitR=false,
  invaderMoveY=canvas.height-canvas.height,///inicia os invader no topo da tela
@@ -44,6 +46,7 @@ function Objeto(w,h,x,y,cor,img){
     this.img=img;
     this.centerX=()=>{return this.x + this.w/2};
     this.centerY=()=>{return this.y + this.h/2};
+    this.collideBolean=false;
     
     ctx.fillStyle=cor;  
     ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -53,7 +56,14 @@ function Objeto(w,h,x,y,cor,img){
         };
     this.animSprite=()=>{
         ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,32,32); 
-    } 
+    };
+    this.collide=function(hitX,hitY,hitW,hitH){
+        this.hitX=hitX;
+        this.hitY=hitY;
+        this.hitW=hitW;
+        this.hitH=hitH;
+        if(this.x<=this.hitX+this.hitW&&this.x+this.w>=this.hitX&&this.y+this.h>=this.hitY&&this.y<=this.hitY+this.hitH)
+        {this.collideBolean=true}else{this.collideBolean=false}}; 
 
 };
 
@@ -112,17 +122,20 @@ function Loop(){
 requestAnimationFrame(Loop,canvas);
 Draw();
 
-if(yoyo){ invaderMoveX+=0.5}else{invaderMoveX-=0.5}
-if(invaderLimitR){invaderMoveY+=16}
-if(invaderLimitL){invaderMoveY+=16}
-
-    for (let i = 0; i < loteInvader; i++) {
+            ///Algoritmo de movimento dos Invader
+            //if(yoyo){ invaderMoveX+=invaderSpd}else{invaderMoveX-=invaderSpd}
+           
+            //if(invaderLimitR){invaderMoveY+=16}
+            //if(invaderLimitL){invaderMoveY+=16}
+           
+            for (let i = 0; i < loteInvader; i++) {
       
-        invader[i].drawSprite()
-        invader[i].y=invaderMoveY
-        invader[i].x=64* i+ invaderMoveX
-    
-    }
+            invader[i].drawSprite()
+            invader[i].y=invaderMoveY
+            invader[i].x=64* i+ invaderMoveX
+            bullet.collide(invader[i].x,invader[i].y,invader[i].w,invader[i].y)///Corregir porque a colisao só acontece no ultimo index dos invaders
+            
+         }
 
     
     if (bullet.y<-bullet.h){bullet.y=boxY;bulletExist=false};
@@ -130,7 +143,7 @@ if(invaderLimitL){invaderMoveY+=16}
 
     if (bulletExist==true ){
               
-        bullet.y-=spd*2
+        bullet.y-=bulletSpd
         bullet.x=boxXPos-bullet.w/2
           
         }else{bullet.x=ship.centerX()}
@@ -142,19 +155,29 @@ if(invaderLimitL){invaderMoveY+=16}
         ///movimenta ship para esquerda e checa se ela colide com canto esquerdo da tela
         if(moveL && ship.centerX()-16 > 0){boxX-=spd}
 
-        ///Aqui vou escrever colisão do bullet com invaders
-        if (bullet.y < invader[0].y){hit=true}else{hit=false}
+        
     
 }Loop();
 
 //Desenha objetos
 
 function Draw() {
-    //variaveis da linha de controle horizontal
+    //variaveis da linha de controle horizontal do primero o ultimo invader da linha
     let lineXMoveTo=invader[0].x,
-    lieYMoveTo=invader[0].y+64,
+    lineYMoveTo=invader[0].y+64,
     lineXTo=invader[invader.length-1].x+32,
     lineYTo=invader[invader.length-1].y+64;
+
+
+    //checa se inicio da linha de controle horizontal toca canto esquerdo da tela
+    if(lineXMoveTo<=canvas.width-canvas.width){yoyo=true;invaderLimitL=true}else{invaderLimitL=false}
+    //checa se final da linha de controle horizontal toca canto direito da tela
+    if(lineXTo>=canvas.width){yoyo=false;invaderLimitR=true}else{invaderLimitR=false}
+
+
+     ///Aqui vou escrever colisão do bullet com invaders
+     //if (bulletExist&& bullet.y<=invader[0].y&& bullet.x>invader[0].x&&bullet.x<invader[0].w){hit=true}else{hit=false}
+
 
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();
@@ -165,15 +188,11 @@ function Draw() {
     
     ctx.beginPath();
     ctx.strokeStyle="red"
-    ctx.moveTo(lineXMoveTo,lieYMoveTo);
+    ctx.moveTo(lineXMoveTo,lineYMoveTo);
     ctx.lineTo(lineXTo,lineYTo);
     ctx.stroke();
 
-    //checa se inicio da linha de controle horizontal toca canto esquerdo da tela
-    if(lineXMoveTo==canvas.width-canvas.width){yoyo=true;invaderLimitL=true}else{invaderLimitL=false}
-    //checa se final da linha de controle horizontal toca canto direito da tela
-    if(lineXTo==canvas.width){yoyo=false;invaderLimitR=true}else{invaderLimitR=false}
-
+    
     
 
 /*
@@ -187,9 +206,10 @@ function Draw() {
     ctx.restore();
     ///Gui informação
     info.innerHTML=
-    `<br> msg:${msg}
+    `<br> msg:${bullet.collideBolean}
      <br> invader.y: ${invader[0].y}
      <br> invader.x: ${invader[0].x}
+     <br> invader.x: ${invader[0].w}
      <br> invaderMoveY:${invaderMoveY}
      <br> lineXMoveTo:${lineXMoveTo}
      <br> lineXTo:${lineXTo}
@@ -200,6 +220,7 @@ function Draw() {
      <br> moveR: ${moveR}
      <br> bulletExist: ${bulletExist}
      <br> bullet.y: ${bullet.y}
+     <br> bullet.x: ${bullet.x}
      <br> boxX: ${boxX}
      <br>  boxXPos: ${boxXPos}
      <br> hit: ${hit}
