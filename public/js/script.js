@@ -24,6 +24,8 @@ let canvas = document.querySelector("#canvas"),
  loteInvader=9,
  invaderLimitL=false,
  invaderLimitR=false,
+ invaderMoveY=canvas.height-canvas.height,///inicia os invader no topo da tela
+ invaderMoveX=canvas.width-canvas.width, ///inicia os invaders no canto da tela
  yoyo=undefined,
  msg="",
  colors=["#0DF205","#034001"];
@@ -102,16 +104,6 @@ window.addEventListener("keydown",function(event){
     setInterval(()=>xIndex=0,250);
 
 
-
-
-
-
-   
-    ///Aqui vou escrever o algoritmo que controla o movimento dos invaders
-    let invaderMoveY=canvas.height-canvas.height///inicia os invader no topo da tela    
-   
-    let invaderMoveX=canvas.width-canvas.width ///inicia os invaders no canto da tela
-    setInterval(()=>{if(yoyo){ invaderMoveX+=32}else{invaderMoveX-=32}},2000)///movimento yoyo horizontal
     
     
     //Game Updades
@@ -120,7 +112,9 @@ function Loop(){
 requestAnimationFrame(Loop,canvas);
 Draw();
 
-
+if(yoyo){ invaderMoveX+=0.5}else{invaderMoveX-=0.5}
+if(invaderLimitR){invaderMoveY+=16}
+if(invaderLimitL){invaderMoveY+=16}
 
     for (let i = 0; i < loteInvader; i++) {
       
@@ -180,7 +174,7 @@ function Draw() {
     //checa se final da linha de controle horizontal toca canto direito da tela
     if(lineXTo==canvas.width){yoyo=false;invaderLimitR=true}else{invaderLimitR=false}
 
-
+    
 
 /*
    ctx.beginPath();
