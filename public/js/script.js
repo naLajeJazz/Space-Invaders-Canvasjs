@@ -21,10 +21,11 @@ let canvas = document.querySelector("#canvas"),
  x=boxX,
  bulletExist=false,
  invader=[],
- loteInvader=8,
- invaderLimitL=undefined,
- invaderLimitR=undefined,
+ loteInvader=9,
+ invaderLimitL=false,
+ invaderLimitR=false,
  yoyo=undefined,
+ msg="",
  colors=["#0DF205","#034001"];
  
  
@@ -42,7 +43,7 @@ function Objeto(w,h,x,y,cor,img){
     this.centerX=()=>{return this.x + this.w/2};
     this.centerY=()=>{return this.y + this.h/2};
     
-    ctx.fillStyle=cor;
+    ctx.fillStyle=cor;  
     ctx.fillRect(this.x, this.y, this.w, this.h);
     this.drawSprite=()=>{
         ctx.fillStyle=cor;
@@ -73,7 +74,7 @@ window.addEventListener("keyup",()=>{
     moveR=false;
 },false);
 
-//Controles
+///Controles
 
 window.addEventListener("keydown",function(event){
 
@@ -89,6 +90,7 @@ window.addEventListener("keydown",function(event){
             bulletExist=true;
             boxXPos=ship.centerX();
             bullet.y=ship.centerY()-38
+            
             
         }
             
@@ -106,11 +108,11 @@ window.addEventListener("keydown",function(event){
 
    
     ///Aqui vou escrever o algoritmo que controla o movimento dos invaders
-    let invaderMoveY=canvas.height-canvas.height    ///inicia os invader no topo da tela    
-    //setInterval(()=>{invaderMoveY+=32},7000)
-    let invaderMoveX=canvas.width-canvas.width      ///inicia os invaders no canto da tela
-    setInterval(()=>{if(yoyo){ invaderMoveX+=32}else{invaderMoveX-=32}},2000)
-
+    let invaderMoveY=canvas.height-canvas.height///inicia os invader no topo da tela    
+   
+    let invaderMoveX=canvas.width-canvas.width ///inicia os invaders no canto da tela
+    setInterval(()=>{if(yoyo){ invaderMoveX+=32}else{invaderMoveX-=32}},2000)///movimento yoyo horizontal
+    
     
     //Game Updades
     
@@ -141,8 +143,12 @@ Draw();
 
         ship.x=boxX;
 
+        ///movimenta ship pra direita e checa ela colide com canto direito da tela
         if(moveR && ship.centerX()+16 < canvasW){boxX+=spd}
+        ///movimenta ship para esquerda e checa se ela colide com canto esquerdo da tela
         if(moveL && ship.centerX()-16 > 0){boxX-=spd}
+
+        ///Aqui vou escrever colisão do bullet com invaders
         if (bullet.y < invader[0].y){hit=true}else{hit=false}
     
 }Loop();
@@ -150,6 +156,7 @@ Draw();
 //Desenha objetos
 
 function Draw() {
+    //variaveis da linha de controle horizontal
     let lineXMoveTo=invader[0].x,
     lieYMoveTo=invader[0].y+64,
     lineXTo=invader[invader.length-1].x+32,
@@ -168,7 +175,9 @@ function Draw() {
     ctx.lineTo(lineXTo,lineYTo);
     ctx.stroke();
 
+    //checa se inicio da linha de controle horizontal toca canto esquerdo da tela
     if(lineXMoveTo==canvas.width-canvas.width){yoyo=true;invaderLimitL=true}else{invaderLimitL=false}
+    //checa se final da linha de controle horizontal toca canto direito da tela
     if(lineXTo==canvas.width){yoyo=false;invaderLimitR=true}else{invaderLimitR=false}
 
 
@@ -184,8 +193,10 @@ function Draw() {
     ctx.restore();
     ///Gui informação
     info.innerHTML=
-    `<br> invader.y: ${invader[0].y}
+    `<br> msg:${msg}
+     <br> invader.y: ${invader[0].y}
      <br> invader.x: ${invader[0].x}
+     <br> invaderMoveY:${invaderMoveY}
      <br> lineXMoveTo:${lineXMoveTo}
      <br> lineXTo:${lineXTo}
      <br> invaderLimitL:${invaderLimitL}
