@@ -22,7 +22,7 @@ let canvas = document.querySelector("#canvas"),
  bulletExist=false,
  bulletSpd=spd-3,
  invader=[],
- loteInvader=4,
+ loteInvader=6,
  invaderSpd=0.2,
  invaderLimitL=false,
  invaderLimitR=false,
@@ -77,7 +77,7 @@ for (let i = 0; i < loteInvader; i++) {
     
 }
 
-let bullet=new Objeto(4,32,boxX,y,colors[0]);
+let bullet=new Objeto(4,32,x,y,colors[0]);
 let ship = new Objeto(32,32,boxX,boxY,"",sprite);
 
 
@@ -122,27 +122,38 @@ function Loop(){
 requestAnimationFrame(Loop,canvas);
 Draw();
 
+
+
+            /*
             ///Algoritmo de movimento dos Invader
-            //if(yoyo){ invaderMoveX+=invaderSpd}else{invaderMoveX-=invaderSpd}
+            if(yoyo){ invaderMoveX+=invaderSpd}else{invaderMoveX-=invaderSpd}
            
-            //if(invaderLimitR){invaderMoveY+=16}
-            //if(invaderLimitL){invaderMoveY+=16}
-           
+            if(invaderLimitR){invaderMoveY+=16}
+            if(invaderLimitL){invaderMoveY+=16}
+             */
+            
             for (let i = 0; i < loteInvader; i++) {
       
             invader[i].drawSprite()
             invader[i].y=invaderMoveY
             invader[i].x=64* i+ invaderMoveX
-            bullet.collide(invader[i].x,invader[i].y,invader[i].w,invader[i].y)///Corregir porque a colisao só acontece no ultimo index dos invaders
+            bullet.collide(invader[i].x,invader[i].y,invader[i].w,invader[i].y)
             
-         }
+            
+        }
+        
+       
+           
+
+         
 
     
     if (bullet.y<-bullet.h){bullet.y=boxY;bulletExist=false};
 
 
     if (bulletExist==true ){
-              
+        
+        
         bullet.y-=bulletSpd
         bullet.x=boxXPos-bullet.w/2
           
@@ -195,13 +206,15 @@ function Draw() {
     
     
 
-/*
+
    ctx.beginPath();
-   ctx.strokeStyle="red"
-   ctx.moveTo(ship.centerX(),ship.centerY());
+   
+   ctx.strokeStyle=colors[Math.floor(Math.random()*colors.length)]
+   ctx.globalAlpha = 0.4;
+   ctx.moveTo(bullet.centerX(),ship.centerY()-16);
    ctx.lineTo(bullet.centerX(),bullet.centerY());
    ctx.stroke();
-*/
+
     
     ctx.restore();
     ///Gui informação
@@ -209,7 +222,7 @@ function Draw() {
     `<br> msg:${bullet.collideBolean}
      <br> invader.y: ${invader[0].y}
      <br> invader.x: ${invader[0].x}
-     <br> invader.x: ${invader[0].w}
+     <br> invader.w: ${invader[0].w}
      <br> invaderMoveY:${invaderMoveY}
      <br> lineXMoveTo:${lineXMoveTo}
      <br> lineXTo:${lineXTo}
