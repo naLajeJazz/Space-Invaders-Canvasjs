@@ -30,7 +30,8 @@ let canvas = document.querySelector("#canvas"),
  invaderMoveX=canvas.width-canvas.width, ///inicia os invaders no canto da tela
  yoyo=undefined,
  msg="",
- colors=["#0DF205","#034001"];
+ colors=["#0DF205","#034001"],
+ hudColor="white";
  
  
 canvas.width=canvasW;
@@ -53,6 +54,7 @@ function Objeto(w,h,x,y,cor,img){
     this.drawSprite=()=>{
         ctx.fillStyle=cor;
         ctx.fillRect(this.x, this.y, this.w, this.h);
+
         };
     this.animSprite=()=>{
         ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,32,32); 
@@ -123,28 +125,45 @@ requestAnimationFrame(Loop,canvas);
 Draw();
 
 
-
-            /*
+/*
+            
             ///Algoritmo de movimento dos Invader
             if(yoyo){ invaderMoveX+=invaderSpd}else{invaderMoveX-=invaderSpd}
            
             if(invaderLimitR){invaderMoveY+=16}
             if(invaderLimitL){invaderMoveY+=16}
-             */
-            
+             
+  */          
             for (let i = 0; i < loteInvader; i++) {
       
             invader[i].drawSprite()
             invader[i].y=invaderMoveY
             invader[i].x=64* i+ invaderMoveX
-            bullet.collide(invader[i].x,invader[i].y,invader[i].w,invader[i].y)
-            
+            invader[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+
+             ///destroy o bullet quando ele colide com invaders   
+            if(invader[i].collideBolean){bullet.x=ship.centerX();bullet.y=boxY;bulletExist=false}
+
+            ///Aqui vamos destruir o invader
+            if(invader[i].collideBolean){
+                invader[i].splice(invader[i],1)
+            }
+
+
+           /*
+           ///Uma segunda linha de invaders
+            for(let j=0;j< loteInvader;j++){
+            invader[j].drawSprite()
+            invader[j].y=invaderMoveY+64
+            invader[j].x=64* i+ invaderMoveX
+            invader[j].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+            }
+          */
             
         }
-        
        
            
-
+    
          
 
     
@@ -217,9 +236,19 @@ function Draw() {
 
     
     ctx.restore();
+
+    if (invader[0].collideBolean){hudColor="red"}else{hudColor="white"}
+    ctx.font = "30px Courier New";
+    ctx.fillStyle = hudColor;
+    ctx.textAlign = "center";
+    ctx.fillText(invader[0].collideBolean, canvas.width/2, canvas.height/2);
+  
+
+
+
     ///Gui informação
     info.innerHTML=
-    `<br> msg:${bullet.collideBolean}
+    `
      <br> invader.y: ${invader[0].y}
      <br> invader.x: ${invader[0].x}
      <br> invader.w: ${invader[0].w}
@@ -236,7 +265,6 @@ function Draw() {
      <br> bullet.x: ${bullet.x}
      <br> boxX: ${boxX}
      <br>  boxXPos: ${boxXPos}
-     <br> hit: ${hit}
      <br> ship.centerX: ${ship.centerX()}
      <br> canvas.width:${canvas.width}
      <br> canvas.height:${canvas.height}
