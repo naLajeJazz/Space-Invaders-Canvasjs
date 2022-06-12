@@ -52,6 +52,7 @@ function Objeto(w,h,x,y,cor,img){
     ctx.fillStyle=cor;  
     ctx.fillRect(this.x, this.y, this.w, this.h);
     this.drawSprite=()=>{
+        
         ctx.fillStyle=cor;
         ctx.fillRect(this.x, this.y, this.w, this.h);
 
@@ -141,13 +142,10 @@ Draw();
             invader[i].x=64* i+ invaderMoveX
             invader[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
 
-             ///destroy o bullet quando ele colide com invaders   
-            if(invader[i].collideBolean){bullet.x=ship.centerX();bullet.y=boxY;bulletExist=false}
+             ///Retorna o bullet pra shipcenterx quando ele colide com invaders   
+            if(invader[i].collideBolean){invader.remove(invader[i])}
 
-            ///Aqui vamos destruir o invader
-            if(invader[i].collideBolean){
-                invader[i].splice(invader[i],1)
-            }
+           
 
 
            /*
