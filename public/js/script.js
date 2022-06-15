@@ -22,7 +22,8 @@ let canvas = document.querySelector("#canvas"),
  bulletExist=false,
  bulletSpd=spd-3,
  invader=[],
- loteInvader=6,
+ invaderB=[],
+ loteInvader=4,
  invaderSpd=0.2,
  invaderLimitL=false,
  invaderLimitR=false,
@@ -31,7 +32,8 @@ let canvas = document.querySelector("#canvas"),
  yoyo=undefined,
  msg="",
  colors=["#0DF205","#034001"],
- hudColor="white";
+ hudColor="white",
+ changeHud=false;
  
  
 canvas.width=canvasW;
@@ -47,7 +49,7 @@ function Objeto(w,h,x,y,cor,img){
     this.img=img;
     this.centerX=()=>{return this.x + this.w/2};
     this.centerY=()=>{return this.y + this.h/2};
-    this.collideBolean=false;
+    
     
     ctx.fillStyle=cor;  
     ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -58,15 +60,23 @@ function Objeto(w,h,x,y,cor,img){
 
         };
     this.animSprite=()=>{
-        ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,32,32); 
+        ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,this.w,this.h); 
     };
     this.collide=function(hitX,hitY,hitW,hitH){
+        this.collideBolean=false;
         this.hitX=hitX;
         this.hitY=hitY;
         this.hitW=hitW;
         this.hitH=hitH;
         if(this.x<=this.hitX+this.hitW&&this.x+this.w>=this.hitX&&this.y+this.h>=this.hitY&&this.y<=this.hitY+this.hitH)
-        {this.collideBolean=true}else{this.collideBolean=false}}; 
+        {this.collideBolean=true}else{this.collideBolean=false}};
+        
+        this.hudMsg=function(msg){ 
+            ctx.font = "16px Courier New";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.fillText(msg, this.x+16,this.y+42);
+          }
 
 };
 
@@ -76,6 +86,7 @@ function Objeto(w,h,x,y,cor,img){
 for (let i = 0; i < loteInvader; i++) {
     
  invader[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
+ invaderB[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
     
     
 }
@@ -133,30 +144,21 @@ Draw();
            
             if(invaderLimitR){invaderMoveY+=16}
             if(invaderLimitL){invaderMoveY+=16}
-             
-  */          
+  */           
+          
             for (let i = 0; i < loteInvader; i++) {
       
             invader[i].drawSprite()
             invader[i].y=invaderMoveY
             invader[i].x=64* i+ invaderMoveX
             invader[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+            invaderB[i].drawSprite()
+            invaderB[i].y=invaderMoveY+100
+            invaderB[i].x=64* i+ invaderMoveX
+            invaderB[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
 
-             ///Retorna o bullet pra shipcenterx quando ele colide com invaders   
-            if(invader[i].collideBolean){invader.remove(invader[i])}
-
-           
-
-
-           /*
-           ///Uma segunda linha de invaders
-            for(let j=0;j< loteInvader;j++){
-            invader[j].drawSprite()
-            invader[j].y=invaderMoveY+64
-            invader[j].x=64* i+ invaderMoveX
-            invader[j].collide(bullet.x,bullet.y,bullet.w,bullet.h)
-            }
-          */
+           invader[i].hudMsg(invader[i].collideBolean)
+           invaderB[i].hudMsg(invaderB[i].collideBolean)
             
         }
        
@@ -235,18 +237,13 @@ function Draw() {
     
     ctx.restore();
 
-    if (invader[0].collideBolean){hudColor="red"}else{hudColor="white"}
-    ctx.font = "30px Courier New";
-    ctx.fillStyle = hudColor;
-    ctx.textAlign = "center";
-    ctx.fillText(invader[0].collideBolean, canvas.width/2, canvas.height/2);
   
 
 
 
     ///Gui informação
     info.innerHTML=
-    `
+    `hud= ${changeHud}
      <br> invader.y: ${invader[0].y}
      <br> invader.x: ${invader[0].x}
      <br> invader.w: ${invader[0].w}
