@@ -6,8 +6,8 @@ let canvas = document.querySelector("#canvas"),
  info = document.querySelector(".info"),
  ctx = canvas.getContext("2d"),
  sprite = document.getElementById("shipSprite"),
- canvasW=840,
- canvasH=612,
+ canvasW=940,
+ canvasH=676,
  boxX=canvasW/2,
  boxY=canvasH-64,
  boxXPos=0,
@@ -23,22 +23,22 @@ let canvas = document.querySelector("#canvas"),
  bulletSpd=spd-3,
  invader=[],
  invaderB=[],
- loteInvader=4,
+ invaderC=[],
+ invaderD=[],
+ loteInvader=8,
  invaderSpd=0.2,
  invaderLimitL=false,
  invaderLimitR=false,
- invaderMoveY=canvas.height-canvas.height,///inicia os invader no topo da tela
- invaderMoveX=canvas.width-canvas.width, ///inicia os invaders no canto da tela
+ invaderMoveY=canvas.height-canvas.height+16,///inicia os invader no topo da tela
+ invaderMoveX=canvas.width-canvas.width+128, ///inicia os invaders no canto da tela
  yoyo=undefined,
  msg="",
- colors=["#0DF205","#034001"],
- hudColor="white",
- changeHud=false;
+ colors=["red","orange","pink","brown"];
  
  
 canvas.width=canvasW;
 canvas.height=canvasH;
-canvas.style.backgroundColor='#0D0D0D';
+canvas.style.backgroundColor="";
 
 //Objeto construtor
 function Objeto(w,h,x,y,cor,img){
@@ -51,14 +51,14 @@ function Objeto(w,h,x,y,cor,img){
     this.centerY=()=>{return this.y + this.h/2};
     
     
-    ctx.fillStyle=cor;  
-    ctx.fillRect(this.x, this.y, this.w, this.h);
+   
     this.drawSprite=()=>{
         
         ctx.fillStyle=cor;
         ctx.fillRect(this.x, this.y, this.w, this.h);
 
         };
+
     this.animSprite=()=>{
         ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,this.w,this.h); 
     };
@@ -69,7 +69,7 @@ function Objeto(w,h,x,y,cor,img){
         this.hitW=hitW;
         this.hitH=hitH;
         if(this.x<=this.hitX+this.hitW&&this.x+this.w>=this.hitX&&this.y+this.h>=this.hitY&&this.y<=this.hitY+this.hitH)
-        {this.collideBolean=true}else{this.collideBolean=false}};
+        {this.collideBolean=true;}else{this.collideBolean=false}};
         
         this.hudMsg=function(msg){ 
             ctx.font = "16px Courier New";
@@ -87,6 +87,8 @@ for (let i = 0; i < loteInvader; i++) {
     
  invader[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
  invaderB[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
+ invaderC[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
+ invaderD[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
     
     
 }
@@ -137,28 +139,44 @@ requestAnimationFrame(Loop,canvas);
 Draw();
 
 
-/*
+
             
             ///Algoritmo de movimento dos Invader
             if(yoyo){ invaderMoveX+=invaderSpd}else{invaderMoveX-=invaderSpd}
            
             if(invaderLimitR){invaderMoveY+=16}
             if(invaderLimitL){invaderMoveY+=16}
-  */           
+            
           
             for (let i = 0; i < loteInvader; i++) {
-      
+       
             invader[i].drawSprite()
             invader[i].y=invaderMoveY
-            invader[i].x=64* i+ invaderMoveX
+            invader[i].x=74* i+ invaderMoveX
             invader[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
-            invaderB[i].drawSprite()
-            invaderB[i].y=invaderMoveY+100
-            invaderB[i].x=64* i+ invaderMoveX
-            invaderB[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+            invader[i].hudMsg(invader[i].collideBolean)
 
-           invader[i].hudMsg(invader[i].collideBolean)
-           invaderB[i].hudMsg(invaderB[i].collideBolean)
+            invaderB[i].drawSprite()
+            invaderB[i].y=invaderMoveY+64
+            invaderB[i].x=74* i+ invaderMoveX-6
+            invaderB[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+            invaderB[i].hudMsg(invaderB[i].collideBolean)
+
+            invaderC[i].drawSprite()
+            invaderC[i].y=invaderMoveY+128
+            invaderC[i].x=74* i+ invaderMoveX
+            invaderC[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+            invaderC[i].hudMsg(invaderC[i].collideBolean)
+
+            invaderD[i].drawSprite()
+            invaderD[i].y=invaderMoveY+192
+            invaderD[i].x=74* i+ invaderMoveX
+            invaderD[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
+            invaderD[i].hudMsg(invaderD[i].collideBolean)
+
+            //retornando Bullet para  shipY
+           if(invaderD[i].collideBolean){bulletExist=false; bullet.y=ship.centerY()}
+        
             
         }
        
@@ -205,23 +223,20 @@ function Draw() {
     if(lineXTo>=canvas.width){yoyo=false;invaderLimitR=true}else{invaderLimitR=false}
 
 
-     ///Aqui vou escrever colisão do bullet com invaders
-     //if (bulletExist&& bullet.y<=invader[0].y&& bullet.x>invader[0].x&&bullet.x<invader[0].w){hit=true}else{hit=false}
-
-
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();
     
     ship.animSprite()
+    ship.hudMsg(bulletExist)
     if (bulletExist) {bullet.drawSprite()} 
    
-    
+    /*
     ctx.beginPath();
     ctx.strokeStyle="red"
     ctx.moveTo(lineXMoveTo,lineYMoveTo);
     ctx.lineTo(lineXTo,lineYTo);
     ctx.stroke();
-
+*/
     
     
 
@@ -239,7 +254,7 @@ function Draw() {
 
   
 
-
+/*
 
     ///Gui informação
     info.innerHTML=
@@ -265,5 +280,6 @@ function Draw() {
      <br> canvas.height:${canvas.height}
      
      
-     `    
+     `  
+     */  
 };
