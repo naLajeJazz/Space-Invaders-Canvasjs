@@ -1,7 +1,10 @@
 export let canvas = document.getElementById("canvas");
 export let ctx = canvas.getContext("2d");
 
-
+let xIndex =0
+///anima imagem
+setInterval(()=>xIndex=32,125);
+setInterval(()=>xIndex=0,250);
 export default class Objeto {
                 
 constructor (w,h,x,y){
