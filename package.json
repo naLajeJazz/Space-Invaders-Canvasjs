@@ -1,11 +1,8 @@
 {
   "dependencies": {
-    
     "ejs": "^3.1.8",
-    
     "express": "^4.18.1"
   },
-  
   "name": "canvas-game",
   "description": "Clone Space Invaders",
   "version": "1.0.0",
