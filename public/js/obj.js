@@ -1,15 +1,15 @@
-export const canvas = document.getElementById("Canvas");
-export const ctx = canvas.getContext("2d");
+export let canvas = document.getElementById("canvas");
+export let ctx = canvas.getContext("2d");
 
 
-export default class Objeto{
+export default class Objeto {
                 
-contructor (w,h,x,y,img){
+constructor (w,h,x,y){
                   this.w=w;
                   this.h=h;
                   this.x=x;
                   this.y=y;
-                  this.img=img;
+                 
 }
 
 
@@ -26,7 +26,8 @@ contructor (w,h,x,y,img){
               
                       };
               
-                  animSprite=()=>{
+                  animSprite=(img)=>{
+                    this.img=img;
                       ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,this.w,this.h); 
                   };
                   collide=(hitX,hitY,hitW,hitH)=>{

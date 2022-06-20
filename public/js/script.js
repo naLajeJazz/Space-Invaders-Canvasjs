@@ -1,11 +1,10 @@
 ///***Clone de Space Invaders***///
 ///***Escrito por Rodrigo Melo***///
+import Objeto from './obj.js'
+import {canvas} from './obj.js'
+import {ctx} from './obj.js'
 
-
-let canvas = document.querySelector("#canvas"),
- info = document.querySelector(".info"),
- ctx = canvas.getContext("2d"),
- sprite = document.getElementById("shipSprite"),
+let sprite = document.getElementById("shipSprite"),
  canvasW=940,
  canvasH=676,
  boxX=canvasW/2,
@@ -39,7 +38,7 @@ let canvas = document.querySelector("#canvas"),
 canvas.width=canvasW;
 canvas.height=canvasH;
 canvas.style.backgroundColor="";
-
+/*
 //Objeto construtor
 function Objeto(w,h,x,y,cor,img){
     this.w=w;
@@ -78,23 +77,23 @@ function Objeto(w,h,x,y,cor,img){
             ctx.fillText(msg, this.x+16,this.y+42);
           }
 
-};
+};*/
 
 
 //Inicia objetos
 
 for (let i = 0; i < loteInvader; i++) {
     
- invader[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
- invaderB[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
- invaderC[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
- invaderD[i]=new Objeto(32,32,0,100,colors[Math.floor(Math.random()*colors.length)])  
+ invader[i]=new Objeto(32,32,0,100)  
+ invaderB[i]=new Objeto(32,32,0,100)  
+ invaderC[i]=new Objeto(32,32,0,100)  
+ invaderD[i]=new Objeto(32,32,0,100)  
     
     
 }
 
-let bullet=new Objeto(4,32,x,y,colors[0]);
-let ship = new Objeto(32,32,boxX,boxY,"",sprite);
+let bullet=new Objeto(4,32,x,y);
+let ship = new Objeto(32,32,boxX,boxY);
 
 
 window.addEventListener("keyup",()=>{
@@ -150,25 +149,25 @@ Draw();
           
             for (let i = 0; i < loteInvader; i++) {
        
-            invader[i].drawSprite()
+            invader[i].drawSprite('red')
             invader[i].y=invaderMoveY
             invader[i].x=74* i+ invaderMoveX
             invader[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
             invader[i].hudMsg(invader[i].collideBolean)
 
-            invaderB[i].drawSprite()
+            invaderB[i].drawSprite('red')
             invaderB[i].y=invaderMoveY+64
             invaderB[i].x=74* i+ invaderMoveX-6
             invaderB[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
             invaderB[i].hudMsg(invaderB[i].collideBolean)
 
-            invaderC[i].drawSprite()
+            invaderC[i].drawSprite('red')
             invaderC[i].y=invaderMoveY+128
             invaderC[i].x=74* i+ invaderMoveX
             invaderC[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
             invaderC[i].hudMsg(invaderC[i].collideBolean)
 
-            invaderD[i].drawSprite()
+            invaderD[i].drawSprite('red')
             invaderD[i].y=invaderMoveY+192
             invaderD[i].x=74* i+ invaderMoveX
             invaderD[i].collide(bullet.x,bullet.y,bullet.w,bullet.h)
@@ -226,9 +225,9 @@ function Draw() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();
     
-    ship.animSprite()
+    ship.animSprite(sprite)
     ship.hudMsg(bulletExist)
-    if (bulletExist) {bullet.drawSprite()} 
+    if (bulletExist) {bullet.drawSprite('red')} 
    
     /*
     ctx.beginPath();
