@@ -1,8 +1,10 @@
+///***Clone de Space Invaders***///
+///***Escrito por Rodrigo Melo***///
 export let canvas = document.getElementById("canvas");
 export let ctx = canvas.getContext("2d");
 
-let xIndex =0
 ///anima imagem
+let xIndex =0
 setInterval(()=>xIndex=32,125);
 setInterval(()=>xIndex=0,250);
 export default class Objeto {
@@ -23,16 +25,19 @@ constructor (w,h,x,y){
                   
                  
                   drawSprite=(cor)=>{
-                      
+                   
                       ctx.fillStyle=cor;
                       ctx.fillRect(this.x, this.y, this.w, this.h);
+                     
               
                       };
               
                   animSprite=(img)=>{
+                    
                     this.img=img;
                       ctx.drawImage(this.img,xIndex,0,32,32,this.x,this.y,this.w,this.h); 
-                  };
+                  
+                    };
                   collide=(hitX,hitY,hitW,hitH)=>{
                       this.collideBolean=false;
                       this.hitX=hitX;
@@ -44,12 +49,12 @@ constructor (w,h,x,y){
                   }
                       
                       hudMsg=function(msg){ 
+                       
                           ctx.font = "16px Courier New";
                           ctx.fillStyle = "white";
                           ctx.textAlign = "center";
                           ctx.fillText(msg, this.x+16,this.y+42);
+                          
                         }
               
               }
-
-
