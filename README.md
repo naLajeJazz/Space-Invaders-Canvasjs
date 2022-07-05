@@ -1,5 +1,3 @@
-# Space Invaders Clone com Java script
+# Space Invaders Clone com Java script #
+## Pixel Clocks Studio ##
 
-### "a" para mover pra direita
-### "d" para mover pra esquerda
-### "w" para disparar laser
